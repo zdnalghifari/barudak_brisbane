@@ -1,0 +1,1688 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Referensi Warga Anyar Brisbane</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+    />
+    <style>
+      :root {
+        --sand: #f5efe0;
+        --ocean: #1a6b7c;
+        --deep: #0d3b47;
+        --gold: #f4b942;
+        --mint: #4dbfb0;
+        --ink: #1c1c2e;
+        --coral: #e8634a;
+        --jog: #6ecc72;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--ink);
+        color: var(--sand);
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* HEADER */
+      header {
+        flex-shrink: 0;
+        padding: 11px 20px;
+        background: linear-gradient(135deg, #0d3b47, #071e28);
+        border-bottom: 1px solid rgba(77, 191, 176, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+        z-index: 500;
+      }
+      .hbrand {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .heyebrow {
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--mint);
+        opacity: 0.75;
+      }
+      .htitle {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(16px, 2.5vw, 24px);
+        font-weight: 800;
+        color: var(--sand);
+        letter-spacing: -0.5px;
+        line-height: 1;
+      }
+      .htitle span {
+        color: var(--gold);
+      }
+
+      /* TABS */
+      .tabs {
+        display: flex;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50px;
+        padding: 3px;
+        gap: 2px;
+      }
+      .tb {
+        font-family: "Syne", sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 6px 13px;
+        border-radius: 50px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: rgba(245, 239, 224, 0.45);
+        background: transparent;
+        white-space: nowrap;
+      }
+      .tb.a-brisbane {
+        background: var(--ocean);
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(26, 107, 124, 0.5);
+      }
+      .tb.a-goldcoast {
+        background: var(--gold);
+        color: var(--ink);
+        box-shadow: 0 2px 8px rgba(244, 185, 66, 0.5);
+      }
+      .tb.a-jogging {
+        background: var(--jog);
+        color: #0a1a0a;
+        box-shadow: 0 2px 8px rgba(110, 204, 114, 0.5);
+      }
+
+      /* LAYOUT */
+      .layout {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        min-height: 0;
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        background: #0b1120;
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        min-height: 0;
+      }
+      .sb-head {
+        flex-shrink: 0;
+        padding: 13px 14px 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .dbadge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-family: "Syne", sans-serif;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 3px 8px;
+        border-radius: 4px;
+        margin-bottom: 5px;
+      }
+      .db-brisbane {
+        background: rgba(26, 107, 124, 0.2);
+        color: var(--mint);
+        border: 1px solid rgba(77, 191, 176, 0.3);
+      }
+      .db-goldcoast {
+        background: rgba(244, 185, 66, 0.15);
+        color: var(--gold);
+        border: 1px solid rgba(244, 185, 66, 0.3);
+      }
+      .db-jogging {
+        background: rgba(110, 204, 114, 0.12);
+        color: var(--jog);
+        border: 1px solid rgba(110, 204, 114, 0.3);
+      }
+      .sb-title {
+        font-family: "Syne", sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--sand);
+        line-height: 1.2;
+      }
+      .sb-sub {
+        font-size: 10px;
+        color: rgba(245, 239, 224, 0.38);
+        margin-top: 3px;
+      }
+
+      .istrip {
+        flex-shrink: 0;
+        margin: 8px 14px 0;
+        border-radius: 7px;
+        padding: 8px 10px;
+        display: flex;
+        gap: 7px;
+        align-items: flex-start;
+      }
+      .is-home {
+        background: rgba(232, 99, 74, 0.07);
+        border: 1px solid rgba(232, 99, 74, 0.2);
+      }
+      .is-trans {
+        background: rgba(77, 191, 176, 0.06);
+        border: 1px solid rgba(77, 191, 176, 0.14);
+      }
+      .is-jog {
+        background: rgba(110, 204, 114, 0.07);
+        border: 1px solid rgba(110, 204, 114, 0.18);
+      }
+      .is-icon {
+        font-size: 14px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .is-text {
+        font-size: 10px;
+        color: rgba(245, 239, 224, 0.5);
+        line-height: 1.5;
+      }
+      .is-text strong {
+        color: var(--mint);
+      }
+      .is-home .is-text strong {
+        color: #ff8f7a;
+      }
+      .is-jog .is-text strong {
+        color: var(--jog);
+      }
+
+      /* LIST */
+      .slist {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px 14px 14px;
+        min-height: 0;
+      }
+      .slist::-webkit-scrollbar {
+        width: 3px;
+      }
+      .slist::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+      }
+
+      .si {
+        display: flex;
+        gap: 8px;
+        padding: 4px 0;
+        cursor: pointer;
+      }
+      .si:hover .sc {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .si.active .sc {
+        background: rgba(77, 191, 176, 0.06);
+        border-color: rgba(77, 191, 176, 0.35);
+      }
+      .si.si-home .sc {
+        border-color: rgba(232, 99, 74, 0.28);
+        background: rgba(232, 99, 74, 0.04);
+      }
+      .si.si-jog-item .sc {
+        border-color: rgba(110, 204, 114, 0.22);
+      }
+      .si.active.si-jog-item .sc {
+        background: rgba(110, 204, 114, 0.07);
+        border-color: rgba(110, 204, 114, 0.4);
+      }
+
+      .stl {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-shrink: 0;
+        width: 24px;
+      }
+      .sdot {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Syne", sans-serif;
+        font-size: 10px;
+        font-weight: 800;
+        transition: transform 0.2s;
+        flex-shrink: 0;
+      }
+      .d-brisbane {
+        background: var(--ocean);
+        color: #fff;
+      }
+      .d-goldcoast {
+        background: var(--gold);
+        color: var(--ink);
+      }
+      .d-home {
+        background: var(--coral);
+        color: #fff;
+        font-size: 12px;
+      }
+      .d-jog {
+        background: var(--jog);
+        color: #0a1a0a;
+      }
+      .si.active .sdot {
+        transform: scale(1.15);
+      }
+      .sline {
+        width: 2px;
+        flex: 1;
+        min-height: 9px;
+        background: rgba(255, 255, 255, 0.07);
+        margin: 3px 0;
+      }
+      .si:last-child .sline {
+        display: none;
+      }
+
+      .sc {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 7px;
+        padding: 8px 10px;
+        transition: all 0.2s;
+        margin-bottom: 5px;
+      }
+      .stime {
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: rgba(245, 239, 224, 0.35);
+        margin-bottom: 2px;
+      }
+      .sname {
+        font-family: "Syne", sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--sand);
+        line-height: 1.2;
+        margin-bottom: 2px;
+      }
+      .sdesc {
+        font-size: 10px;
+        color: rgba(245, 239, 224, 0.42);
+        line-height: 1.5;
+      }
+      .stags {
+        display: flex;
+        gap: 3px;
+        flex-wrap: wrap;
+        margin-top: 5px;
+      }
+      .tag {
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        padding: 2px 5px;
+        border-radius: 3px;
+        text-transform: uppercase;
+      }
+      .tag-free {
+        background: rgba(77, 191, 176, 0.15);
+        color: var(--mint);
+      }
+      .tag-food {
+        background: rgba(232, 99, 74, 0.15);
+        color: #ff8f7a;
+      }
+      .tag-nature {
+        background: rgba(74, 180, 100, 0.15);
+        color: #7dd98f;
+      }
+      .tag-culture {
+        background: rgba(147, 112, 219, 0.15);
+        color: #b39ddb;
+      }
+      .tag-beach {
+        background: rgba(26, 107, 124, 0.2);
+        color: #5ec8d8;
+      }
+      .tag-market {
+        background: rgba(244, 185, 66, 0.15);
+        color: var(--gold);
+      }
+      .tag-home {
+        background: rgba(232, 99, 74, 0.15);
+        color: #ff8f7a;
+      }
+      .tag-jog {
+        background: rgba(110, 204, 114, 0.15);
+        color: var(--jog);
+      }
+      .tag-flat {
+        background: rgba(77, 191, 176, 0.12);
+        color: #7dd9d0;
+      }
+
+      .dbtn {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 6px;
+        font-size: 9px;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: all 0.2s;
+      }
+      .dbtn-teal {
+        color: var(--mint);
+        background: rgba(77, 191, 176, 0.1);
+        border: 1px solid rgba(77, 191, 176, 0.22);
+      }
+      .dbtn-gold {
+        color: var(--gold);
+        background: rgba(244, 185, 66, 0.1);
+        border: 1px solid rgba(244, 185, 66, 0.25);
+      }
+      .dbtn-coral {
+        color: #ff8f7a;
+        background: rgba(232, 99, 74, 0.1);
+        border: 1px solid rgba(232, 99, 74, 0.25);
+      }
+      .dbtn-jog {
+        color: var(--jog);
+        background: rgba(110, 204, 114, 0.1);
+        border: 1px solid rgba(110, 204, 114, 0.25);
+      }
+      .dbtn:hover {
+        filter: brightness(1.25);
+      }
+
+      /* MAP */
+      .mapwrap {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+      }
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+      .mlegend {
+        position: absolute;
+        bottom: 18px;
+        right: 10px;
+        z-index: 900;
+        background: rgba(11, 17, 32, 0.93);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 9px;
+        padding: 11px 13px;
+        min-width: 148px;
+      }
+      .mlt {
+        font-family: "Syne", sans-serif;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: rgba(245, 239, 224, 0.3);
+        margin-bottom: 7px;
+      }
+      .mli {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 4px;
+        font-size: 9px;
+        color: rgba(245, 239, 224, 0.6);
+      }
+      .mld {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .mll {
+        width: 18px;
+        height: 0;
+        border-top: 2px dashed rgba(255, 255, 255, 0.2);
+        flex-shrink: 0;
+      }
+      .mlr {
+        width: 18px;
+        height: 3px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      /* BASEMAP TOGGLE */
+      .bm-toggle {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 900;
+        display: flex;
+        background: rgba(11, 17, 32, 0.92);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .bm-btn {
+        font-family: "Syne", sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 7px 13px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: rgba(245, 239, 224, 0.5);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+      }
+      .bm-btn.bm-active {
+        background: rgba(77, 191, 176, 0.18);
+        color: var(--mint);
+      }
+      .bm-btn:hover:not(.bm-active) {
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(245, 239, 224, 0.8);
+      }
+      .bm-divider {
+        width: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 660px) {
+        .layout {
+          grid-template-columns: 1fr;
+          grid-template-rows: 50vh 1fr;
+        }
+        .mapwrap {
+          order: 1;
+        }
+        .sidebar {
+          order: 2;
+        }
+        html,
+        body {
+          overflow: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="hbrand">
+        <span class="heyebrow">🇦🇺 Guide Asal-asalan · Brisbane</span>
+        <h1 class="htitle">Barudak <span>Brisbane</span></h1>
+      </div>
+      <div class="tabs">
+        <button
+          class="tb a-brisbane"
+          id="tb-brisbane"
+          onclick="switchDest('brisbane')"
+        >
+          🏙️ Brisbane City
+        </button>
+        <button class="tb" id="tb-goldcoast" onclick="switchDest('goldcoast')">
+          🌊 Gold Coast
+        </button>
+        <button class="tb" id="tb-jogging" onclick="switchDest('jogging')">
+          🏃 Jogging
+        </button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <div class="sidebar">
+        <div class="sb-head">
+          <div id="dest-badge" class="dbadge db-brisbane">🏙️ Brisbane City</div>
+          <div id="dest-title" class="sb-title">Minggu Seru di Brisbane</div>
+          <div id="dest-sub" class="sb-sub">
+            6 titik · ~12 km dari Indooroopilly
+          </div>
+        </div>
+        <div
+          class="istrip is-home"
+          id="home-strip"
+          style="cursor: pointer; align-items: center"
+          onclick="openLocationModal()"
+          title="Klik untuk ubah titik start"
+        >
+          <div class="is-icon">🏠</div>
+          <div class="is-text" style="flex: 1; min-width: 0">
+            <strong>Titik Start Anda:</strong><br />
+            <strong>(Bisa disesuaikan klik icon pensil)</strong><br />
+            <span id="home-disp-name" style="color: rgba(245, 239, 224, 0.75)"
+              >Kostan Kang Gifni &amp; Bang Okta</span
+            ><br />
+            <span id="home-disp-addr" style="font-size: 9px; opacity: 0.55"
+              >261 Moggill Rd, Indooroopilly</span
+            >
+          </div>
+          <div
+            style="
+              flex-shrink: 0;
+              font-size: 11px;
+              color: rgba(77, 191, 176, 0.55);
+              padding-left: 6px;
+            "
+          >
+            ✏️
+          </div>
+        </div>
+        <div id="trans-strip" class="istrip is-trans">
+          <div class="is-icon">🚌</div>
+          <div class="is-text" id="trans-text">
+            <strong>Transportasi:</strong> Bus dari Indooroopilly Station atau
+            CityCat 50¢
+          </div>
+        </div>
+        <div class="slist" id="slist"></div>
+      </div>
+
+      <div class="mapwrap">
+        <div id="map"></div>
+        <div class="bm-toggle">
+          <button class="bm-btn" id="bm-dark" onclick="setBasemap('dark')">
+            🌑 Dark
+          </button>
+          <div class="bm-divider"></div>
+          <button
+            class="bm-btn bm-active"
+            id="bm-satellite"
+            onclick="setBasemap('satellite')"
+          >
+            🛰️ Satellite
+          </button>
+        </div>
+        <div class="mlegend">
+          <div class="mlt">Keterangan</div>
+          <div class="mli">
+            <div class="mld" style="background: #e8634a"></div>
+            Titik Start
+          </div>
+          <div class="mli" id="leg-stop">
+            <div class="mld" style="background: #1a6b7c"></div>
+            Stop
+          </div>
+          <div class="mli" id="leg-route">
+            <div class="mll"></div>
+            Rute
+          </div>
+          <div
+            class="mli"
+            style="margin-top: 4px; font-size: 8px; opacity: 0.35"
+          >
+            Klik marker → detail &amp; arah
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOCATION MODAL -->
+    <div
+      id="loc-modal"
+      style="
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(6px);
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        style="
+          background: #0f172a;
+          border: 1px solid rgba(77, 191, 176, 0.25);
+          border-radius: 16px;
+          padding: 24px;
+          width: min(380px, 92vw);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+        "
+      >
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+          "
+        >
+          <div>
+            <div
+              style="
+                font-family: Syne, sans-serif;
+                font-size: 15px;
+                font-weight: 800;
+                color: #f5efe0;
+              "
+            >
+              📍 Atur Titik Start
+            </div>
+            <div
+              style="
+                font-size: 10px;
+                color: rgba(245, 239, 224, 0.4);
+                margin-top: 2px;
+              "
+            >
+              Lokasi tersimpan di browser kamu
+            </div>
+          </div>
+          <button
+            onclick="closeLocationModal()"
+            style="
+              background: rgba(255, 255, 255, 0.07);
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              border-radius: 6px;
+              color: rgba(245, 239, 224, 0.6);
+              font-size: 14px;
+              padding: 4px 9px;
+              cursor: pointer;
+            "
+          >
+            ✕
+          </button>
+        </div>
+        <button
+          id="gps-btn"
+          onclick="useGPS()"
+          style="
+            width: 100%;
+            padding: 11px 14px;
+            background: rgba(77, 191, 176, 0.1);
+            border: 1px solid rgba(77, 191, 176, 0.25);
+            border-radius: 9px;
+            color: #4dbfb0;
+            font-family: Syne, sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+          "
+        >
+          <span style="font-size: 16px">📡</span>
+          <span style="flex: 1; text-align: left">Gunakan Lokasi GPS Saya</span>
+          <span id="gps-status" style="font-size: 9px; opacity: 0.6"></span>
+        </button>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+          "
+        >
+          <div
+            style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.08)"
+          ></div>
+          <span
+            style="
+              font-size: 9px;
+              color: rgba(245, 239, 224, 0.3);
+              letter-spacing: 1px;
+              text-transform: uppercase;
+            "
+            >atau isi manual</span
+          >
+          <div
+            style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.08)"
+          ></div>
+        </div>
+        <div style="margin-bottom: 10px">
+          <label
+            style="
+              font-size: 10px;
+              font-weight: 600;
+              color: rgba(245, 239, 224, 0.45);
+              letter-spacing: 0.5px;
+              text-transform: uppercase;
+              display: block;
+              margin-bottom: 5px;
+            "
+            >Nama Lokasi</label
+          >
+          <input
+            id="loc-name"
+            type="text"
+            placeholder="cth: Kamar saya, Hotel ABC..."
+            style="
+              width: 100%;
+              background: rgba(255, 255, 255, 0.06);
+              border: 1px solid rgba(255, 255, 255, 0.12);
+              border-radius: 7px;
+              padding: 9px 12px;
+              color: #f5efe0;
+              font-family: &quot;DM Sans&quot;, sans-serif;
+              font-size: 11px;
+              outline: none;
+            "
+          />
+        </div>
+        <div style="margin-bottom: 10px">
+          <label
+            style="
+              font-size: 10px;
+              font-weight: 600;
+              color: rgba(245, 239, 224, 0.45);
+              letter-spacing: 0.5px;
+              text-transform: uppercase;
+              display: block;
+              margin-bottom: 5px;
+            "
+            >Alamat</label
+          >
+          <input
+            id="loc-addr"
+            type="text"
+            placeholder="cth: 261 Moggill Rd, Indooroopilly"
+            style="
+              width: 100%;
+              background: rgba(255, 255, 255, 0.06);
+              border: 1px solid rgba(255, 255, 255, 0.12);
+              border-radius: 7px;
+              padding: 9px 12px;
+              color: #f5efe0;
+              font-family: &quot;DM Sans&quot;, sans-serif;
+              font-size: 11px;
+              outline: none;
+            "
+          />
+        </div>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+          "
+        >
+          <div>
+            <label
+              style="
+                font-size: 10px;
+                font-weight: 600;
+                color: rgba(245, 239, 224, 0.45);
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                display: block;
+                margin-bottom: 5px;
+              "
+              >Latitude</label
+            >
+            <input
+              id="loc-lat"
+              type="number"
+              step="any"
+              placeholder="-27.5069"
+              style="
+                width: 100%;
+                background: rgba(255, 255, 255, 0.06);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                border-radius: 7px;
+                padding: 9px 12px;
+                color: #f5efe0;
+                font-family: &quot;DM Sans&quot;, sans-serif;
+                font-size: 11px;
+                outline: none;
+              "
+            />
+          </div>
+          <div>
+            <label
+              style="
+                font-size: 10px;
+                font-weight: 600;
+                color: rgba(245, 239, 224, 0.45);
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                display: block;
+                margin-bottom: 5px;
+              "
+              >Longitude</label
+            >
+            <input
+              id="loc-lng"
+              type="number"
+              step="any"
+              placeholder="152.9765"
+              style="
+                width: 100%;
+                background: rgba(255, 255, 255, 0.06);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                border-radius: 7px;
+                padding: 9px 12px;
+                color: #f5efe0;
+                font-family: &quot;DM Sans&quot;, sans-serif;
+                font-size: 11px;
+                outline: none;
+              "
+            />
+          </div>
+        </div>
+        <div
+          id="loc-err"
+          style="
+            display: none;
+            font-size: 10px;
+            color: #ff8f7a;
+            margin-bottom: 10px;
+            padding: 7px 10px;
+            background: rgba(232, 99, 74, 0.1);
+            border-radius: 6px;
+            border: 1px solid rgba(232, 99, 74, 0.2);
+          "
+        ></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px">
+          <button
+            onclick="resetToDefault()"
+            style="
+              padding: 10px;
+              background: rgba(255, 255, 255, 0.06);
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              border-radius: 8px;
+              color: rgba(245, 239, 224, 0.55);
+              font-family: Syne, sans-serif;
+              font-size: 10px;
+              font-weight: 700;
+              cursor: pointer;
+            "
+          >
+            ↩ Reset Default
+          </button>
+          <button
+            onclick="saveLocation()"
+            style="
+              padding: 10px;
+              background: #1a6b7c;
+              border: none;
+              border-radius: 8px;
+              color: #fff;
+              font-family: Syne, sans-serif;
+              font-size: 10px;
+              font-weight: 700;
+              cursor: pointer;
+            "
+          >
+            ✓ Simpan Lokasi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script>
+      /* ═══ DEFAULT & ACTIVE HOME ══════════════════════════════════════════ */
+      const HOME_DEFAULT = {
+        name: "Kostan Kang Gifni & Bang Okta",
+        addr: "261 Moggill Rd, Indooroopilly QLD 4068",
+        lat: -27.5069,
+        lng: 152.9765,
+      };
+
+      // Active home — loaded from storage or falls back to default
+      let HOME = Object.assign({}, HOME_DEFAULT);
+      HOME.gmaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(HOME.addr)}`;
+
+      /* Load saved location from window.storage */
+      async function loadSavedHome() {
+        try {
+          const r = await window.storage.get("user-home-location");
+          if (r && r.value) {
+            const saved = JSON.parse(r.value);
+            HOME = Object.assign({}, saved);
+            HOME.gmaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(HOME.addr || HOME.lat + "," + HOME.lng)}`;
+          }
+        } catch (e) {
+          /* key not found = use default, that's fine */
+        }
+        refreshHomeUI();
+      }
+
+      function refreshHomeUI() {
+        document.getElementById("home-disp-name").textContent =
+          HOME.name || "Lokasi Saya";
+        document.getElementById("home-disp-addr").textContent =
+          HOME.addr || `${HOME.lat.toFixed(5)}, ${HOME.lng.toFixed(5)}`;
+      }
+
+      /* ═══ MODAL LOGIC ════════════════════════════════════════════════════ */
+      function openLocationModal() {
+        document.getElementById("loc-name").value = HOME.name || "";
+        document.getElementById("loc-addr").value = HOME.addr || "";
+        document.getElementById("loc-lat").value = HOME.lat || "";
+        document.getElementById("loc-lng").value = HOME.lng || "";
+        document.getElementById("loc-err").style.display = "none";
+        document.getElementById("gps-status").textContent = "";
+        const m = document.getElementById("loc-modal");
+        m.style.display = "flex";
+      }
+      function closeLocationModal() {
+        document.getElementById("loc-modal").style.display = "none";
+      }
+      // close on backdrop click
+      document
+        .getElementById("loc-modal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) closeLocationModal();
+        });
+
+      function showLocErr(msg) {
+        const el = document.getElementById("loc-err");
+        el.textContent = msg;
+        el.style.display = "block";
+      }
+
+      async function saveLocation() {
+        const name = document.getElementById("loc-name").value.trim();
+        const addr = document.getElementById("loc-addr").value.trim();
+        const lat = parseFloat(document.getElementById("loc-lat").value);
+        const lng = parseFloat(document.getElementById("loc-lng").value);
+        document.getElementById("loc-err").style.display = "none";
+        if (!name) {
+          showLocErr("Nama lokasi tidak boleh kosong.");
+          return;
+        }
+        if (isNaN(lat) || isNaN(lng)) {
+          showLocErr(
+            "Latitude & Longitude harus diisi dengan angka yang valid.",
+          );
+          return;
+        }
+        if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+          showLocErr("Koordinat di luar rentang valid.");
+          return;
+        }
+        const saved = {
+          name,
+          addr: addr || `${lat.toFixed(5)}, ${lng.toFixed(5)}`,
+          lat,
+          lng,
+        };
+        try {
+          await window.storage.set("user-home-location", JSON.stringify(saved));
+        } catch (e) {
+          /* storage unavailable, still update in-memory */
+        }
+        HOME = Object.assign({}, saved);
+        HOME.gmaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(HOME.addr)}`;
+        refreshHomeUI();
+        closeLocationModal();
+        render(_cur); // re-render map with new home
+      }
+
+      async function resetToDefault() {
+        try {
+          await window.storage.delete("user-home-location");
+        } catch (e) {}
+        HOME = Object.assign({}, HOME_DEFAULT);
+        HOME.gmaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(HOME.addr)}`;
+        document.getElementById("loc-name").value = HOME.name;
+        document.getElementById("loc-addr").value = HOME.addr;
+        document.getElementById("loc-lat").value = HOME.lat;
+        document.getElementById("loc-lng").value = HOME.lng;
+        document.getElementById("loc-err").style.display = "none";
+        refreshHomeUI();
+        closeLocationModal();
+        render(_cur);
+      }
+
+      function useGPS() {
+        const statusEl = document.getElementById("gps-status");
+        const btn = document.getElementById("gps-btn");
+        if (!navigator.geolocation) {
+          showLocErr("Browser tidak mendukung GPS.");
+          return;
+        }
+        statusEl.textContent = "⏳ Mencari...";
+        btn.style.opacity = ".7";
+        btn.disabled = true;
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const lat = parseFloat(pos.coords.latitude.toFixed(6));
+            const lng = parseFloat(pos.coords.longitude.toFixed(6));
+            document.getElementById("loc-lat").value = lat;
+            document.getElementById("loc-lng").value = lng;
+            if (!document.getElementById("loc-name").value)
+              document.getElementById("loc-name").value = "Lokasi Saya";
+            if (!document.getElementById("loc-addr").value)
+              document.getElementById("loc-addr").value = `${lat}, ${lng}`;
+            statusEl.textContent = "✅ Berhasil!";
+            btn.style.opacity = "1";
+            btn.disabled = false;
+            document.getElementById("loc-err").style.display = "none";
+          },
+          (err) => {
+            statusEl.textContent = "❌ Gagal";
+            btn.style.opacity = "1";
+            btn.disabled = false;
+            const msgs = {
+              1: "Izin lokasi ditolak.",
+              2: "Sinyal GPS tidak ditemukan.",
+              3: "Waktu habis.",
+            };
+            showLocErr("GPS: " + (msgs[err.code] || "Error tidak dikenal."));
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
+        );
+      }
+
+      const DESTS = {
+        brisbane: {
+          label: "🏙️ Brisbane City Area",
+          title: "Biar Minggu ga Kosong di Brisbane",
+          sub: "6 titik",
+          trans:
+            "Bus atau CityCat (Kucing Kota) 50¢ · Semua spot mudah via transportasi umum",
+          badgeCls: "db-brisbane",
+          dotCls: "d-brisbane",
+          btnCls: "dbtn dbtn-teal",
+          color: "#1A6B7C",
+          center: [-27.49, 153.022],
+          zoom: 13,
+          showHome: true,
+          stops: [
+            {
+              n: "1",
+              t: "08:00",
+              name: "Saint and co",
+              desc: "Brunch pagi di café favorit lokal St. Lucia. Kopi enak, harga terjangkau.",
+              tags: ["food"],
+              lat: -27.5024515,
+              lng: 153.0061229,
+            },
+            {
+              n: "2",
+              t: "10:00",
+              name: "Riverside Sunday Market",
+              desc: "Market Minggu di tepi Sungai Brisbane. Street food multikultural & produk handmade.",
+              tags: ["market", "free"],
+              lat: -27.4739242,
+              lng: 153.0293848,
+            },
+            {
+              n: "3",
+              t: "12:00",
+              name: "Museum of Brisbane",
+              desc: "Masuk GRATIS di City Hall ikonik. Pameran sejarah & budaya. Buka 10–17.",
+              tags: ["free", "culture"],
+              lat: -27.4686797,
+              lng: 153.0238277,
+            },
+            {
+              n: "4",
+              t: "14:00",
+              name: "South Bank Parklands",
+              desc: "Streets Beach buatan, taman hijau, pemandangan CBD. Gratis 24 jam.",
+              tags: ["free", "nature", "beach"],
+              lat: -27.4753665,
+              lng: 153.0208068,
+            },
+            {
+              n: "5",
+              t: "15:30",
+              name: "GOMA & QAG",
+              desc: "Dua galeri seni GRATIS berdampingan. Pameran imersif kelas dunia. Buka 10–17.",
+              tags: ["free", "culture"],
+              lat: -27.47056,
+              lng: 153.0171334,
+            },
+            {
+              n: "6",
+              t: "16:30",
+              name: "The Collective Markets",
+              desc: "Market artisan produk unik & makanan enak. Jalan kaki dari South Bank. Tutup 17.00.",
+              tags: ["market", "food"],
+              lat: -27.4790775,
+              lng: 153.0223771,
+            },
+          ],
+        },
+        goldcoast: {
+          label: "🌊 Gold Coast",
+          title: "Melancong Seharian Penuh di Gold Coast",
+          sub: "5 titik",
+          trans:
+            "Kereta dari Roma Street/Central → G:link tram · Total ~1j 50m · Tarif ~$3 contactless",
+          badgeCls: "db-goldcoast",
+          dotCls: "d-goldcoast",
+          btnCls: "dbtn dbtn-gold",
+          color: "#F4B942",
+          center: [-28.06, 153.44],
+          zoom: 11,
+          showHome: true,
+          stops: [
+            {
+              n: "1",
+              t: "09:30",
+              name: "Surfers Paradise Beach",
+              desc: "Pantai ikonik Gold Coast, GRATIS. Pagi lebih sepi, berenang di zona bendera.",
+              tags: ["free", "beach", "nature"],
+              lat: -27.9992435,
+              lng: 153.4314575,
+            },
+            {
+              n: "2",
+              t: "11:00",
+              name: "Broadwater Parklands",
+              desc: "Taman tepi laut GRATIS di Southport. Water play, playground & piknik.",
+              tags: ["free", "nature"],
+              lat: -27.9657753,
+              lng: 153.4172077,
+            },
+            {
+              n: "3",
+              t: "12:30",
+              name: "Hakataya Ramen",
+              desc: "Ramen Jepang murah di Surfers Paradise. Bisa tambah mie gratis!",
+              tags: ["food"],
+              lat: -28.0007941,
+              lng: 153.4286268,
+            },
+            {
+              n: "4",
+              t: "14:00",
+              name: "Burleigh Head National Park",
+              desc: "Taman nasional GRATIS. Trek tebing laut ~2km, view headland terbaik di GC (katanya AI)!",
+              tags: ["free", "nature"],
+              lat: -28.0918206,
+              lng: 153.4591743,
+            },
+            {
+              n: "5",
+              t: "16:00",
+              name: "Coolangatta Beach",
+              desc: 'Pantai "hidden gem" lebih tenang dari Surfers. Terbaik untuk sunset sebelum pulang!',
+              tags: ["free", "beach", "nature"],
+              lat: -28.1663925,
+              lng: 153.5404094,
+            },
+          ],
+        },
+        jogging: {
+          label: "🏃 Jogging Track",
+          title: "South Bank yang katanya datar",
+          sub: "6 titik · ~6 km total · Datar & cocok buat aklamatisasi",
+          trans:
+            "CityCat 50¢ ke South Bank Pontoon ATAU bus 169/192 South Bank",
+          badgeCls: "db-jogging",
+          dotCls: "d-jog",
+          btnCls: "dbtn dbtn-jog",
+          color: "#6ECC72",
+          center: [-27.477, 153.023],
+          zoom: 15,
+          showHome: false,
+          stops: [
+            {
+              n: "1",
+              t: "Start",
+              name: "South Bank Parklands Entry",
+              desc: "Titik awal di depan pintu masuk selatan South Bank. Parkir gratis pagi hari di Grey St.",
+              tags: ["jog", "free", "flat"],
+              lat: -27.4813,
+              lng: 153.0217,
+              extra: "Fasilitas: toilet umum & air minum tersedia di sini.",
+            },
+            {
+              n: "2",
+              t: "~500m",
+              name: "Streets Beach & Lagoon",
+              desc: "Lewati Streets Beach — pantai buatan ikonik. Trek di sepanjang tepi lagoon, permukaan rata.",
+              tags: ["jog", "flat", "beach"],
+              lat: -27.4757,
+              lng: 153.0204,
+              extra: "Pagi hari sangat sepi, suasana sejuk. Bagus untuk foto!",
+            },
+            {
+              n: "3",
+              t: "~1.5km",
+              name: "Riverside Promenade",
+              desc: "Clem Jones Promenade di tepi sungai. Trek beton mulus, view CBD Brisbane yang spektakuler.",
+              tags: ["jog", "flat"],
+              lat: -27.4748,
+              lng: 153.0212,
+              extra: "Trek favorit warga Brisbane untuk pagi hari.",
+            },
+            {
+              n: "4",
+              t: "~2.5km",
+              name: "Goodwill Bridge",
+              desc: "Jembatan pejalan kaki ikonik, gratis. Menyeberang ke sisi CBD lalu balik — menambah ~400m.",
+              tags: ["jog", "free", "flat"],
+              lat: -27.474,
+              lng: 153.0241,
+              extra: "Opsi: teruskan ke City Botanic Gardens di sisi lain.",
+            },
+            {
+              n: "5",
+              t: "~3.5km",
+              name: "Little Stanley St & GOMA",
+              desc: "Putar lewat depan GOMA & QAG. Trek trotoar lebar dan teduh dengan banyak pohon.",
+              tags: ["jog", "flat"],
+              lat: -27.4724,
+              lng: 153.0185,
+              extra: "Ada air mancur & tempat duduk untuk istirahat sejenak.",
+            },
+            {
+              n: "6",
+              t: "~5km",
+              name: "Epicurious Garden — Finish",
+              desc: "Finish di kebun herbal komunitas South Bank. Dinginkan badan, fasilitas lengkap di sekitar.",
+              tags: ["jog", "free", "flat"],
+              lat: -27.4801,
+              lng: 153.0245,
+              extra: "Rekomendasi: mampir kafe South Bank setelah lari!",
+            },
+          ],
+        },
+      };
+
+      const TAGL = {
+        free: "Gratis",
+        food: "Kuliner",
+        nature: "Alam",
+        culture: "Budaya",
+        beach: "Pantai",
+        market: "Market",
+        home: "Home",
+        jog: "Jogging",
+        flat: "Datar",
+      };
+
+      /* ═══ MAP INIT — center & zoom WAJIB di konstruktor ═══ */
+      const map = L.map("map", {
+        center: [-27.49, 153.022], // ← initial center, mencegah "Set map center first"
+        zoom: 13,
+        zoomControl: false,
+      });
+
+      L.control.zoom({ position: "topright" }).addTo(map);
+
+      /* Basemap layers */
+      const _layers = {
+        dark: L.tileLayer(
+          "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+          {
+            attribution:
+              '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+            maxZoom: 19,
+          },
+        ),
+        satellite: L.tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          {
+            attribution:
+              "Tiles &copy; Esri &mdash; Source: Esri, Airbus DS, USGS, NGA, NASA",
+            maxZoom: 19,
+          },
+        ),
+        satLabels: L.tileLayer(
+          "https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png",
+          {
+            attribution: "",
+            maxZoom: 19,
+            pane: "shadowPane",
+          },
+        ),
+      };
+      let _curBasemap = "satellite";
+      _layers.satellite.addTo(map);
+      _layers.satLabels.addTo(map);
+
+      function setBasemap(mode) {
+        if (mode === _curBasemap) return;
+        // remove old
+        if (_curBasemap === "dark") {
+          map.removeLayer(_layers.dark);
+        } else {
+          map.removeLayer(_layers.satellite);
+          map.removeLayer(_layers.satLabels);
+        }
+        // add new
+        if (mode === "dark") {
+          _layers.dark.addTo(map);
+        } else {
+          _layers.satellite.addTo(map);
+          _layers.satLabels.addTo(map);
+        }
+        _curBasemap = mode;
+        document
+          .getElementById("bm-dark")
+          .classList.toggle("bm-active", mode === "dark");
+        document
+          .getElementById("bm-satellite")
+          .classList.toggle("bm-active", mode === "satellite");
+      }
+      const _ps = document.createElement("style");
+      _ps.textContent = `.gp .leaflet-popup-content-wrapper{background:transparent!important;box-shadow:0 8px 28px rgba(0,0,0,.75)!important;border-radius:12px!important;padding:0!important;overflow:hidden;}.gp .leaflet-popup-content{margin:0!important;width:auto!important;}.gp .leaflet-popup-tip{display:none;}.gp .leaflet-popup-close-button{color:rgba(245,239,224,.5)!important;font-size:16px!important;top:5px!important;right:7px!important;z-index:10;}`;
+      document.head.appendChild(_ps);
+
+      let _mks = [],
+        _poly = null,
+        _homeM = null,
+        _jogPoly = null;
+
+      /* ═══ ICONS ══════════════════════════════════════════════════════════ */
+      function mkPinIcon(lbl, bg, fg = "#fff") {
+        return L.divIcon({
+          className: "",
+          html: `<div style="width:28px;height:28px;background:${bg};border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid rgba(255,255,255,.2);box-shadow:0 3px 10px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(45deg);font-family:Syne,sans-serif;font-weight:800;font-size:11px;color:${fg};line-height:1;">${lbl}</span></div>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 28],
+          popupAnchor: [0, -32],
+        });
+      }
+      function mkHomeIcon() {
+        return L.divIcon({
+          className: "",
+          html: `<div style="width:32px;height:32px;background:#E8634A;border-radius:50%;border:3px solid rgba(255,255,255,.3);box-shadow:0 3px 12px rgba(232,99,74,.6);display:flex;align-items:center;justify-content:center;font-size:15px;">🏠</div>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16],
+          popupAnchor: [0, -18],
+        });
+      }
+      function mkJogIcon(lbl) {
+        return L.divIcon({
+          className: "",
+          html: `<div style="width:28px;height:28px;background:#6ECC72;border-radius:50%;border:2px solid rgba(255,255,255,.25);box-shadow:0 2px 10px rgba(110,204,114,.5);display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-weight:800;font-size:11px;color:#0a1a0a;">${lbl}</div>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14],
+          popupAnchor: [0, -16],
+        });
+      }
+
+      /* ═══ POPUP HTML ══════════════════════════════════════════════════════ */
+      function homePopupHtml() {
+        return `<div style="font-family:'DM Sans',sans-serif;background:#0b1120;border-radius:12px;padding:13px 15px;min-width:195px;border:1px solid rgba(232,99,74,.25);">
+  <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,239,224,.3);margin-bottom:3px;">🏠 TITIK KEBERANGKATAN</div>
+  <div style="font-family:Syne,sans-serif;font-size:12px;font-weight:700;color:#F5EFE0;margin-bottom:3px;">Kostan Kang Gifni &amp; Bang Okta</div>
+  <div style="font-size:10px;color:rgba(245,239,224,.45);margin-bottom:9px;">261 Moggill Rd, Indooroopilly QLD</div>
+  <a href="${HOME.gmaps}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;color:#ff8f7a;text-decoration:none;padding:5px 10px;background:rgba(232,99,74,.12);border:1px solid rgba(232,99,74,.28);border-radius:5px;width:100%;justify-content:center;">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Lihat di Google Maps
+  </a></div>`;
+      }
+
+      function stopPopupHtml(st, destKey) {
+        const d = DESTS[destKey];
+        const isJog = destKey === "jogging";
+        const bc = isJog
+          ? "rgba(110,204,114,.3)"
+          : destKey === "goldcoast"
+            ? "rgba(244,185,66,.3)"
+            : "rgba(77,191,176,.28)";
+        const tc = isJog
+          ? "#6ECC72"
+          : destKey === "goldcoast"
+            ? "#F4B942"
+            : "#4DBFB0";
+        const bg = isJog
+          ? "rgba(110,204,114,.1)"
+          : destKey === "goldcoast"
+            ? "rgba(244,185,66,.1)"
+            : "rgba(77,191,176,.1)";
+        const gmaps = `https://www.google.com/maps/dir/?api=1&destination=${st.lat},${st.lng}&travelmode=${isJog ? "walking" : "transit"}`;
+        const tags = st.tags
+          .map(
+            (t) =>
+              `<span style="font-size:8px;font-weight:700;padding:2px 5px;border-radius:3px;text-transform:uppercase;background:rgba(77,191,176,.14);color:#4DBFB0;margin-right:3px;">${TAGL[t] || t}</span>`,
+          )
+          .join("");
+        const extraHtml = st.extra
+          ? `<div style="font-size:10px;color:rgba(110,204,114,.7);margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.07);line-height:1.4;">ℹ️ ${st.extra}</div>`
+          : "";
+        return `<div style="font-family:'DM Sans',sans-serif;background:#0b1120;border-radius:12px;padding:13px 15px;min-width:205px;max-width:245px;border:1px solid rgba(255,255,255,.07);">
+  <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,239,224,.3);margin-bottom:3px;">Stop ${st.n} · ${st.t}</div>
+  <div style="font-family:Syne,sans-serif;font-size:12px;font-weight:700;color:#F5EFE0;margin-bottom:4px;line-height:1.2;">${st.name}</div>
+  <div style="font-size:10px;color:rgba(245,239,224,.46);line-height:1.5;margin-bottom:7px;">${st.desc}</div>
+  <div style="margin-bottom:8px;">${tags}</div>
+  ${extraHtml}
+  <a href="${gmaps}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;color:${tc};text-decoration:none;padding:5px 10px;background:${bg};border:1px solid ${bc};border-radius:5px;width:100%;justify-content:center;margin-top:8px;">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+    ${isJog ? "Navigasi ke Titik Ini" : "Buka Google Maps Directions"}
+  </a></div>`;
+      }
+
+      /* ═══ RENDER ══════════════════════════════════════════════════════════ */
+      function render(destKey) {
+        const d = DESTS[destKey];
+        const isJog = destKey === "jogging";
+
+        // clear layers
+        _mks.forEach((m) => map.removeLayer(m));
+        _mks = [];
+        if (_poly) {
+          map.removeLayer(_poly);
+          _poly = null;
+        }
+        if (_homeM) {
+          map.removeLayer(_homeM);
+          _homeM = null;
+        }
+        if (_jogPoly) {
+          map.removeLayer(_jogPoly);
+          _jogPoly = null;
+        }
+
+        // update sidebar header
+        document.getElementById("dest-badge").textContent = d.label;
+        document.getElementById("dest-badge").className =
+          "dbadge " + d.badgeCls;
+        document.getElementById("dest-title").textContent = d.title;
+        document.getElementById("dest-sub").textContent = d.sub;
+        document.getElementById("trans-text").innerHTML =
+          "<strong>Transportasi:</strong> " + d.trans;
+
+        // transport strip style for jogging
+        const ts = document.getElementById("trans-strip");
+        ts.className = "istrip " + (isJog ? "is-jog" : "is-trans");
+        ts.children[0].textContent = isJog ? "🏃" : "🚌";
+        ts.children[1].children[0].textContent = isJog
+          ? "Transportasi:"
+          : "Transportasi:";
+        if (isJog)
+          document
+            .querySelectorAll("#trans-strip .is-text strong")
+            .forEach((e) => (e.style.color = "var(--jog)"));
+
+        // legend
+        document.getElementById("leg-stop").innerHTML =
+          `<div class="mld" style="background:${d.color};"></div>${isJog ? "Checkpoint Lari" : "Stop Destinasi"}`;
+        const lr = document.getElementById("leg-route");
+        if (isJog)
+          lr.innerHTML = `<div class="mlr" style="background:rgba(110,204,114,.5);"></div>Rute Jogging`;
+        else lr.innerHTML = `<div class="mll"></div>Rute perjalanan`;
+
+        // home marker (only for travel destinations)
+        if (d.showHome) {
+          _homeM = L.marker([HOME.lat, HOME.lng], { icon: mkHomeIcon() })
+            .addTo(map)
+            .bindPopup(homePopupHtml(), { maxWidth: 260, className: "gp" });
+        }
+
+        // polyline
+        if (isJog) {
+          // closed loop for jogging
+          const pts = [
+            ...d.stops.map((s) => [s.lat, s.lng]),
+            [d.stops[0].lat, d.stops[0].lng],
+          ];
+          _jogPoly = L.polyline(pts, {
+            color: "#6ECC72",
+            weight: 7,
+            opacity: 1,
+            dashArray: null,
+          }).addTo(map);
+        } else {
+          const pts = [
+            [HOME.lat, HOME.lng],
+            ...d.stops.map((s) => [s.lat, s.lng]),
+          ];
+          _poly = L.polyline(pts, {
+            color: d.color,
+            weight: 4,
+            opacity: 1,
+            dashArray: "7 5",
+          }).addTo(map);
+        }
+
+        // markers
+        d.stops.forEach((st, i) => {
+          const icon = isJog
+            ? mkJogIcon(st.n)
+            : mkPinIcon(
+                st.n,
+                d.color,
+                destKey === "goldcoast" ? "#1C1C2E" : "#fff",
+              );
+          const m = L.marker([st.lat, st.lng], { icon })
+            .addTo(map)
+            .bindPopup(stopPopupHtml(st, destKey), {
+              maxWidth: 260,
+              className: "gp",
+            });
+          m.on("click", () => hlStop(i));
+          _mks.push(m);
+        });
+
+        // fly — setView jika belum pernah dipan/tile, flyTo setelah itu
+        map.setView(d.center, d.zoom);
+
+        buildList(d, destKey);
+      }
+
+      /* ═══ SIDEBAR LIST ════════════════════════════════════════════════════ */
+      function buildList(d, destKey) {
+        const list = document.getElementById("slist");
+        list.innerHTML = "";
+        const isJog = destKey === "jogging";
+
+        // home row (only for travel)
+        if (d.showHome) {
+          const hr = document.createElement("div");
+          hr.className = "si si-home";
+          hr.innerHTML = `<div class="stl"><div class="sdot d-home">🏠</div><div class="sline"></div></div>
+    <div class="sc"><div class="stime">Titik Keberangkatan</div><div class="sname">Kostan Kang Gifni &amp; Bang Okta</div>
+    <div class="sdesc">261 Moggill Rd, Indooroopilly QLD 4068</div>
+    <div class="stags"><span class="tag tag-home">Start</span></div>
+    <a class="dbtn dbtn-coral" href="${HOME.gmaps}" target="_blank">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Lihat di Google Maps
+    </a></div>`;
+          hr.addEventListener("click", () => {
+            map.setView([HOME.lat, HOME.lng], 15);
+            setTimeout(() => _homeM && _homeM.openPopup(), 200);
+            setActive(-1);
+          });
+          list.appendChild(hr);
+        }
+
+        // jogging intro card
+        if (isJog) {
+          const intro = document.createElement("div");
+          intro.style.cssText =
+            "background:rgba(110,204,114,.07);border:1px solid rgba(110,204,114,.2);border-radius:7px;padding:9px 11px;margin-bottom:5px;font-size:10px;color:rgba(245,239,224,.55);line-height:1.6;";
+          intro.innerHTML = `<div style="font-family:Syne,sans-serif;font-weight:700;font-size:11px;color:#6ECC72;margin-bottom:4px;">ℹ️ Info Rute</div>
+    <b style="color:rgba(245,239,224,.7);">Total:</b> ~5–6 km · <b style="color:rgba(245,239,224,.7);">Elevasi:</b> hampir nol (datar) · <b style="color:rgba(245,239,224,.7);">Permukaan:</b> beton & paving mulus · Ideal pagi hari pada jam sebangunnya.`;
+          list.appendChild(intro);
+        }
+
+        d.stops.forEach((st, i) => {
+          const tags = st.tags
+            .map((t) => `<span class="tag tag-${t}">${TAGL[t] || t}</span>`)
+            .join("");
+          const gmaps = `https://www.google.com/maps/dir/?api=1&destination=${st.lat},${st.lng}&travelmode=${isJog ? "walking" : "transit"}`;
+          const row = document.createElement("div");
+          row.className = "si" + (isJog ? " si-jog-item" : "");
+          row.id = "si-" + i;
+          row.innerHTML = `<div class="stl"><div class="sdot ${d.dotCls}">${st.n}</div><div class="sline"></div></div>
+    <div class="sc"><div class="stime">${st.t}</div><div class="sname">${st.name}</div>
+    <div class="sdesc">${st.desc}</div><div class="stags">${tags}</div>
+    <a class="${d.btnCls}" href="${gmaps}" target="_blank">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+      ${isJog ? "Navigasi ke Sini" : "Arah Google Maps"}
+    </a></div>`;
+          row.addEventListener("click", () => {
+            map.setView([st.lat, st.lng], 16);
+            setTimeout(() => _mks[i] && _mks[i].openPopup(), 200);
+            hlStop(i);
+          });
+          list.appendChild(row);
+        });
+      }
+
+      function hlStop(idx) {
+        setActive(idx);
+        const el = document.getElementById("si-" + idx);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+      function setActive(idx) {
+        document.querySelectorAll("#slist .si").forEach((el, i) => {
+          const offset = DESTS[_cur].showHome ? 1 : 0;
+          el.classList.toggle(
+            "active",
+            idx === -1 ? i === 0 : i === idx + offset,
+          );
+        });
+      }
+
+      /* ═══ TAB SWITCH ══════════════════════════════════════════════════════ */
+      let _cur = "brisbane";
+      function switchDest(d) {
+        _cur = d;
+        document.getElementById("tb-brisbane").className =
+          "tb" + (d === "brisbane" ? " a-brisbane" : "");
+        document.getElementById("tb-goldcoast").className =
+          "tb" + (d === "goldcoast" ? " a-goldcoast" : "");
+        document.getElementById("tb-jogging").className =
+          "tb" + (d === "jogging" ? " a-jogging" : "");
+        render(d);
+      }
+
+      /* ═══ INIT ════════════════════════════════════════════════════════════ */
+      loadSavedHome().then(() => render("brisbane"));
+    </script>
+  </body>
+</html>
